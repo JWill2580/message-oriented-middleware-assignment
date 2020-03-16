@@ -1,0 +1,146 @@
+tags:
+  -
+    name: Accounts
+    description: 'Every registered account'
+  -
+    name: Account
+    description: 'A specific account'
+paths:
+  /accounts:
+    get:
+      description: 'get all registered accounts'
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: 'Response with array'
+          schema:
+            x-oad-type: array
+            type: array
+            items:
+              x-oad-type: reference
+              $ref: '#/definitions/Account'
+          x-oad-type: response
+        '404':
+          $ref: '#/responses/404'
+          x-oad-type: reference
+    post:
+      operationId: 'Create new account'
+      summary: 'Create new account'
+      description: 'Create new account'
+      tags:
+        - Accounts
+      responses:
+        '201':
+          description: '<p>Account successfully created.</p><p>the URI is available at<code>uri</code>. The new account is returned in the response</p>'
+          schema:
+            x-oad-type: reference
+            $ref: '#/definitions/Account'
+          x-oad-type: response
+        '422':
+          description: 'Account NOT created, already exists.'
+          x-oad-type: response
+      parameters:
+        -
+          $ref: '#/parameters/account'
+          x-oad-type: reference
+    x-oad-type: operation
+  '/accounts/account/{id}':
+    put:
+      operationId: 'Update details of existing account'
+      summary: 'Update details of existing account'
+      description: 'Update details of existing account'
+      tags:
+        - Account
+      responses:
+        '204':
+          description: 'Successfully Updated'
+          x-oad-type: response
+        '404':
+          description: 'Page not found'
+          x-oad-type: response
+        '422':
+          description: 'Id in the body does not match the id in the path'
+          x-oad-type: response
+      parameters:
+        -
+          $ref: '#/parameters/account'
+          x-oad-type: reference
+    delete:
+      operationId: 'delete account'
+      description: 'Delete account'
+      tags:
+        - Account
+      responses:
+        '204':
+          description: 'Product successfully deleted'
+          x-oad-type: response
+        '404':
+          description: 'No found'
+          x-oad-type: response
+    parameters:
+      -
+        name: id
+        in: path
+        description: 'The id of the account'
+        required: true
+        type: string
+        x-oad-type: parameter
+    x-oad-type: operation
+parameters:
+  account:
+    name: account
+    in: body
+    description: 'Details of a account'
+    required: true
+    schema:
+      x-oad-type: reference
+      $ref: '#/definitions/Account'
+    x-oad-type: parameter
+responses:
+  '404':
+    description: 'No account with id was found'
+    x-oad-type: response
+definitions:
+  Account:
+    x-oad-type: object
+    type: object
+    properties:
+      id:
+        x-oad-type: string
+        type: string
+      email:
+        x-oad-type: string
+        type: string
+      username:
+        x-oad-type: string
+        type: string
+      firstname:
+        x-oad-type: string
+        type: string
+      lastname:
+        x-oad-type: string
+        type: string
+      group:
+        x-oad-type: string
+        type: string
+      uri:
+        x-oad-type: string
+        type: string
+    required:
+      - id
+info:
+  title: 'Customer Accounts Service'
+  version: 1.0.0
+  description: 'A RESTful service that manages a customer account'
+  contact:
+    name: 'Josh Wilson'
+    email: wiljo912@student.otago.ac.nz
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+swagger: '2.0'

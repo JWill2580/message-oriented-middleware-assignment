@@ -23,7 +23,7 @@ public class Server extends Jooby {
 		use(new AccountsResource(dao));
 		use(new AccountResource(dao));
 
-		use(new ApiTool().swagger(new ApiTool.Options("/swagger").use("accountAPI.yaml")));
+		use(new ApiTool().swagger(new ApiTool.Options("/swagger").use("accountsAPI.yaml")));
 
 	}
 

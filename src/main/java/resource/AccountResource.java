@@ -20,17 +20,17 @@ public class AccountResource extends Jooby {
 			post((req, rsp) -> {
 				Account acc = req.body(Account.class);
 
-				// construct the URI for this product
+				// construct the URI for this account
 				String uri = "http://" + req.hostname() + ":" + req.port() + "" + req.path() + "/product/" + acc.getId();
 
 				// tell the account about its URI
 				acc.setUri(uri);
 
 				if (!dao.exists(acc.getId())) {
-					// store the product
+					// store the account
 					dao.addAccount(acc);
 
-					// return a response containing the complete product
+					// return a response containing the complete account
 					rsp.status(Status.CREATED).send(acc);
 				} else {
 					// Non-unique ID
