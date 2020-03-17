@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="AccountsModule">
+	<head>
+		<title>TODO supply a title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="js/angular.min.js"></script>
+		<script src="js/angular-resource.min.js"></script>
+		<script src="js/accounts.js"></script>
+	</head>
+	<body>
+		<div ng-controller="AccountsController as accsCtrl">
+			<h1>All Accounts</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Email</th>
+						<th>Username</th>
+						<th>First name</th>
+						<th>Last name</th>
+						<th>Group</th>
+						<th>Uri</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="account in accsCtrl.accounts">
+						<td>{{account.id}}</td>
+						<td>{{account.email}}</td>
+						<td>{{account.username}}</td>
+						<td>{{account.firstName}}</td>
+						<td>{{account.lastName}}</td>
+						<td>{{account.group}}</td>
+						<td>{{account.uri}}</td>
+					</tr>
+				</tbody>
+			</table>
+					
+			<h2>Add a New Account</h2>
+			<fieldset>
+				<legend>Account Details</legend>
+				<form ng-submit="accsCtrl.addAccount(account)">
+					<label>ID:</label>
+					<input type="text" ng-model="account.id">
+					<label>Email:</label>
+					<input type="text" ng-model="account.email">
+					<label>Username:</label>
+					<input type="text" ng-model="account.username">
+					<label>First Name:</label>
+					<input type="text" ng-model="account.firstName">
+					<label>Last Name:</label>
+					<input type="text" ng-model="account.lastName">
+					<label>Group:</label>
+					<input type="text" ng-model="account.group">
+					<label>Uri</label>
+					<input type="text" ng-model="account.uri">
+					<button>Add New Account</button>
+				</form>
+			</fieldset>
+					
+			<h2>Delete Account</h2>
+			<fieldset>
+				<legend>Delete Account</legend>
+				<form ng-submit="accsCtrl.deleteAccount(acc)">
+					<label>Delete Account</label>
+					<input type="text" ng-model="acc.id">
+					<button>Delete Account</button>
+				</form>
+			</fieldset>
+					
+			<h2>Update Account</h2>
+			<fieldset>
+				<legend>Update Account</legend>
+				<form ng-submit="accsCtrl.updateAccount(update)">
+					<label>Update Account</label>
+					<input type="text" ng-model="update.idtoupdate">
+					<hr>
+					<label>Email:</label>
+					<input type="text" ng-model="update.email">
+					<label>Username:</label>
+					<input type="text" ng-model="update.username">
+					<label>First Name:</label>
+					<input type="text" ng-model="update.firstName">
+					<label>Last Name:</label>
+					<input type="text" ng-model="update.lastName">
+					<label>Group:</label>
+					<input type="text" ng-model="update.group">
+					<label>Uri</label>
+					<input type="text" ng-model="update.uri">
+					<button>Update Account</button>
+				</form>
+			</fieldset>
+		</div>
+	</body>
+</html>
