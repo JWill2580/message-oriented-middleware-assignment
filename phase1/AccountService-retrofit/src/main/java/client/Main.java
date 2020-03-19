@@ -40,18 +40,18 @@ public class Main {
 		accountsApi.createNewAccount(account1).execute().body();
 		
 		Account account2 = new Account();
-		account2.setId("re");
+		account2.setId("fd");
 		account2.setEmail("Yoyo@gmail.com");
 		account2.setUsername("JWill");
 		account2.setFirstname("J");
 		account2.setLastname("W");
 		account2.setGroup("high");
-		account2.setUri("http://localhost:8080/api/accounts/account/re");
+		account2.setUri("http://localhost:8080/api/accounts/account/fd");
 		
 		//Update account
-		accountApi.updateDetailsOfExistingAccount(account2, "re").execute().body();
+		accountApi.updateDetailsOfExistingAccount(account2, "fd").execute().body();
 		
-		//Delete account
+		//Delete account - WD1234 existed previously
 		accountApi.deleteAccount("WD1234").execute().body();
 		
 		//Get all accounts
