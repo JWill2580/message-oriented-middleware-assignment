@@ -5,6 +5,7 @@
  */
 package client;
 
+import api.AccountApi;
 import api.AccountsApi;
 import domain.Account;
 import java.io.IOException;
@@ -23,6 +24,20 @@ public class Main {
 				  .addConverterFactory(GsonConverterFactory.create())
 				  .build();
 		AccountsApi accountsApi = retrofit.create(AccountsApi.class);
+		AccountApi accountApi = retrofit.create(AccountApi.class);
+		
+		Account account1 = new Account();
+		account1.setId("fd");
+		account1.setEmail("Yo@gmail.com");
+		account1.setUsername("JWill");
+		account1.setFirstname("Josh");
+		account1.setLastname("Wilson");
+		account1.setGroup("low");
+		account1.setUri("http://localhost:8080/api/catalogue/product/fd");
+		
+		accountsApi.createNewAccount(account1).execute().body();
+		
+		accountApi.updateDetailsOfExistingAccount(account1, "gfds");
 		
 		List<Account> prods = accountsApi.accountsGet().execute().body();
 		System.out.println(prods);
