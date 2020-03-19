@@ -23,6 +23,7 @@ public class Main {
 				  .baseUrl("http://localhost:8080/api/")
 				  .addConverterFactory(GsonConverterFactory.create())
 				  .build();
+		
 		AccountsApi accountsApi = retrofit.create(AccountsApi.class);
 		AccountApi accountApi = retrofit.create(AccountApi.class);
 		
@@ -33,12 +34,27 @@ public class Main {
 		account1.setFirstname("Josh");
 		account1.setLastname("Wilson");
 		account1.setGroup("low");
-		account1.setUri("http://localhost:8080/api/catalogue/product/fd");
+		account1.setUri("http://localhost:8080/api/accounts/account/fd");
 		
+		//Create new account
 		accountsApi.createNewAccount(account1).execute().body();
 		
-		accountApi.updateDetailsOfExistingAccount(account1, "gfds");
+		Account account2 = new Account();
+		account2.setId("re");
+		account2.setEmail("Yoyo@gmail.com");
+		account2.setUsername("JWill");
+		account2.setFirstname("J");
+		account2.setLastname("W");
+		account2.setGroup("high");
+		account2.setUri("http://localhost:8080/api/accounts/account/re");
 		
+		//Update account
+		accountApi.updateDetailsOfExistingAccount(account2, "re").execute().body();
+		
+		//Delete account
+		accountApi.deleteAccount("WD1234").execute().body();
+		
+		//Get all accounts
 		List<Account> prods = accountsApi.accountsGet().execute().body();
 		System.out.println(prods);
 	}
