@@ -8,6 +8,7 @@ package client;
 import api.CustomerApi;
 import api.SalesApi;
 import api.SaleApi;
+import domain.Customer;
 import domain.Sale;
 import java.io.IOException;
 import java.util.List;
@@ -31,15 +32,25 @@ public class Main {
 		SaleApi saleApi = retrofit.create(SaleApi.class);
 		CustomerApi customerApi = retrofit.create(CustomerApi.class);
 		
+		//Showing that can get through id
+		Customer customer1 = new Customer();
+		customer1.setEmail("Josh@gmail.com");
+		customer1.setGroup("low");
+		customer1.setId("123");
+		
 		//Service needs to be create a new sale
 		Sale sale1 = new Sale();
 		sale1.setId("3");
 		sale1.setSaleDate("2/2/2");
+		sale1.setCustomer(customer1);
 		
 		//Add a new sale
 		salesApi.createNewSale(sale1).execute().body();
 		
 		//Delete a sale
 		saleApi.deleteASale("1").execute().body();
+		
+		//customerApi.getSaleForSpecificCustomer(customer1.getId()).execute().body();
+		System.out.println(customerApi.getSaleForSpecificCustomer(customer1.getId()).execute().body());
 	}
 }
