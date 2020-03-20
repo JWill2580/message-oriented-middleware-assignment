@@ -5,6 +5,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import domain.Sale;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,14 +15,16 @@ public class SalesDAO {
 
 	private static final Map<String, Sale> sales = new HashMap<>();
 	private static final Multimap<String, Sale> salesMM = ArrayListMultimap.create();
-
 	/*
 	 * Some dummy data for testing
 	 */
 	static {
 		if (sales.isEmpty()) {
-			sales.put("1", new Sale("1", "12/12/12"));
-			sales.put("2", new Sale("2", "1/1/1"));
+			Customer cust1 = new Customer("1", "Josh@gamil.com", "low");
+			Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
+
+			sales.put("1", new Sale("1", "12/12/12", cust1));
+			sales.put("2", new Sale("2", "1/1/1", cust2));
 		}
 	}
 
@@ -34,6 +37,17 @@ public class SalesDAO {
 		return new ArrayList<>(sales.values());
 	}
 
+	
+	/**
+	 * Get a sale through the customer id
+	 * 
+	 * @param id the id of the customer
+	 * @return the sale with that id
+	 */
+	public Collection<Sale> getThroughId(String id){
+		return salesMM.get(id);
+	}
+	
 	/**
 	 * Adds a account to the catalogue.
 	 *
@@ -41,6 +55,7 @@ public class SalesDAO {
 	 */
 	public void addSale(Sale sale) {
 		sales.put(sale.getId(), sale);
+		salesMM.put(sale.getCustomer().getId(), sale);
 	}
 
 	/**

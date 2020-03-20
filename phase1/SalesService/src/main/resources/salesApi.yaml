@@ -141,6 +141,9 @@ definitions:
         x-oad-type: string
         type: string
         title: saleDate
+      Customer:
+        x-oad-type: reference
+        $ref: '#/definitions/Customer'
     required:
       - id
       - saleDate

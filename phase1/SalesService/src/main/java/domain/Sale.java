@@ -5,6 +5,8 @@
  */
 package domain;
 
+import domain.Customer;
+
 /**
  *
  * @author wiljo912
@@ -12,13 +14,15 @@ package domain;
 public class Sale {
 	String id;
 	String saleDate;
+	Customer customer;
 
 	public Sale() {
 	}
 
-	public Sale(String id, String saleDate) {
+	public Sale(String id, String saleDate, Customer customer) {
 		this.id = id;
 		this.saleDate = saleDate;
+		this.customer = customer;
 	}
 
 	public String getId() {
@@ -37,10 +41,19 @@ public class Sale {
 		this.saleDate = saleDate;
 	}
 
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	@Override
 	public String toString() {
-		return "Sale{" + "id=" + id + ", saleDate=" + saleDate + '}';
+		return "Sale{" + "id=" + id + ", saleDate=" + saleDate + ", customer=" + customer + '}';
 	}
-	
+
+
 	
 }
