@@ -1,0 +1,98 @@
+plugins {
+	id 'java'
+	id 'application'
+	id 'org.hidetake.swagger.generator' version '2.18.2'
+}
+
+repositories {
+	jcenter()
+}
+
+sourceSets {
+
+	swagger {
+
+		java {
+			srcDirs = ['build/swagger/src/main/java']
+		}
+		
+		resources {
+			srcDirs = []
+		}
+
+		dependencies {
+			implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2+'
+			implementation group: 'javax.annotation', name: 'javax.annotation-api', version: '1+'
+			implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2+'
+			swaggerCodegen group: 'io.swagger.codegen.v3', name: 'swagger-codegen-cli', version: '3+'
+		}
+
+		// swagger also needs the main dependencies
+		compileClasspath += main.compileClasspath
+	}
+
+	main {
+
+		dependencies {
+			implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2+'
+		}
+
+		// main source needs to be able to see the compiled swagger output
+		compileClasspath += swagger.output
+		runtimeClasspath += swagger.output
+	}
+}
+
+swaggerSources {
+	catalogue {
+		inputFile = file('src/main/resources/salesApi.yaml')
+		code {
+			outputDir = file('build/swagger')
+			language = 'java'
+			library = 'retrofit2'
+			configFile = file('src/main/resources/config.json')
+			components = [
+				models:true,
+				apis:true,
+				supportingFiles: "CollectionFormats.java,StringUtil.java"
+			]
+		}
+	}
+}
+
+run {
+	standardInput = System.in
+}
+
+task createMissingSourceDirs {
+	group = "Source Directories"
+	description = "Create all of the missing source directories for this project."
+	doFirst {
+		sourceSets.each { def sourceRoot ->
+			sourceRoot.allSource.srcDirTrees.each { def sourceDir ->
+				if(!sourceDir.dir.exists()) {
+					println "Creating ${sourceDir}"
+					mkdir sourceDir.dir
+				}
+			}
+		}
+	}
+}
+
+task deleteEmptySourceDirs {
+	group = "Source Directories"
+	description = "Delete all empty source directories."
+	doFirst {
+		sourceSets.each { def sourceRoot ->
+			sourceRoot.allSource.srcDirTrees.each { def sourceDir ->
+				if(sourceDir.dir.exists() && sourceDir.dir.isDirectory() && sourceDir.dir.list().length == 0) {
+					println "Removing empty ${sourceDir}"
+					sourceDir.dir.delete()
+				}
+			}
+		}
+	}
+
+}
+
+mainClassName = 'Main'

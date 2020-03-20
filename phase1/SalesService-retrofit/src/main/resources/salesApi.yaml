@@ -1,0 +1,196 @@
+tags:
+  -
+    name: Sales
+    description: 'The total sales'
+  -
+    name: Sale
+    description: 'A specific sale'
+  -
+    name: Customer
+paths:
+  /sales:
+    post:
+      operationId: 'Create new sale'
+      summary: 'Create new sale'
+      description: 'Add a new sale to the sales'
+      tags:
+        - Sales
+      responses:
+        '201':
+          description: '<p>product successfully created</p>'
+          schema:
+            x-oad-type: reference
+            $ref: '#/definitions/Sale'
+          x-oad-type: response
+        '422':
+          description: '<p>product not created, already exists</p>'
+          x-oad-type: response
+      parameters:
+        -
+          $ref: '#/parameters/sale'
+          x-oad-type: reference
+    x-oad-type: operation
+  '/sales/sale/{id}':
+    delete:
+      operationId: 'Delete a sale'
+      summary: 'Delete a sale'
+      description: 'Delete a sale with specified id'
+      tags:
+        - Sale
+      responses:
+        '204':
+          description: 'Sale successfully deleted'
+          x-oad-type: response
+        '404':
+          $ref: '#/responses/404'
+          x-oad-type: reference
+    parameters:
+      -
+        name: id
+        in: path
+        description: 'The id of the sale'
+        required: true
+        type: string
+        x-oad-type: parameter
+    x-oad-type: operation
+  '/sales/customer/{id}':
+    get:
+      operationId: 'Get sale for specific customer'
+      summary: 'Get sale for specific customer'
+      description: 'Get sale for specific customer'
+      tags:
+        - Customer
+      responses:
+        '200':
+          description: Succesful
+          schema:
+            x-oad-type: array
+            type: array
+            items:
+              x-oad-type: reference
+              $ref: '#/definitions/Sale'
+          x-oad-type: response
+    parameters:
+      -
+        name: id
+        in: path
+        description: 'The customer id'
+        required: true
+        type: string
+        x-oad-type: parameter
+    x-oad-type: operation
+  '/sales/summary/customer/{id}':
+    get:
+      operationId: 'Get sale data for specified customer'
+      summary: 'Get sale data for specified customer'
+      description: 'Get sale data for specified customer'
+      tags:
+        - Customer
+      responses:
+        '200':
+          description: 'Response has the summary information'
+          schema:
+            x-oad-type: reference
+            $ref: '#/definitions/Summary'
+          x-oad-type: response
+        '404':
+          $ref: '#/responses/404'
+          x-oad-type: reference
+    parameters:
+      -
+        name: id
+        in: path
+        description: 'Customer id'
+        required: true
+        type: string
+        x-oad-type: parameter
+    x-oad-type: operation
+parameters:
+  sale:
+    name: sale
+    in: body
+    description: 'Details of a sale'
+    required: true
+    schema:
+      x-oad-type: reference
+      $ref: '#/definitions/Sale'
+    x-oad-type: parameter
+  customer:
+    name: customer
+    in: path
+    description: 'Customer details'
+    required: true
+    type: string
+    x-oad-type: parameter
+responses:
+  '404':
+    description: 'No sale with id was found'
+    x-oad-type: response
+definitions:
+  Sale:
+    x-oad-type: object
+    type: object
+    title: Sale
+    description: 'Details for a specific sale'
+    properties:
+      id:
+        x-oad-type: string
+        type: string
+        title: id
+      saleDate:
+        x-oad-type: string
+        type: string
+        title: saleDate
+    required:
+      - id
+      - saleDate
+  Customer:
+    x-oad-type: object
+    type: object
+    description: 'Details for a specified customer'
+    properties:
+      id:
+        x-oad-type: string
+        type: string
+      email:
+        x-oad-type: string
+        type: string
+      group:
+        x-oad-type: string
+        type: string
+    required:
+      - id
+  Summary:
+    x-oad-type: object
+    type: object
+    title: Summary
+    properties:
+      numberOfSales:
+        x-oad-type: integer
+        type: integer
+        format: int32
+      totalPayment:
+        x-oad-type: number
+        type: number
+        format: float
+      group:
+        x-oad-type: string
+        type: string
+      uri:
+        x-oad-type: string
+        type: string
+info:
+  title: 'Sales Service'
+  version: 1.0.0
+  description: 'A RESTful service that collects sale information recieved from Vend'
+  contact:
+    name: 'Josh Wilson'
+    email: wiljo912@student.otago.ac.nz
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+swagger: '2.0'
