@@ -33,36 +33,26 @@ public class Main {
 		SaleApi saleApi = retrofit.create(SaleApi.class);
 		CustomerApi customerApi = retrofit.create(CustomerApi.class);
 		
+		//Creating test data
 		Customer customer1 = new Customer();
 		customer1.setId("123");
 		customer1.setEmail("Josh@gmail.com");
 		customer1.setGroup("low");
 		
-		
-		//Service needs to be create a new sale
 		Sale sale1 = new Sale();
 		sale1.setId("3");
 		sale1.setSaleDate("2/2/2");
 		sale1.setCustomer(customer1);
 		
 	
-		
-		//Create a new sale
+		//Getting all sales TODO: remove this functionality as is for testing
 		salesApi.createNewSale(sale1).execute().body();
-		//System.out.println(salesApi.salesGet().execute().body());
+		System.out.println(salesApi.salesGet().execute().body());
 		
-		//Delete a sale
-		//saleApi.deleteASale("1").execute().body();
+		//Delete a sale 2 that exists in the database
+		saleApi.deleteASale("2").execute().body();
 		
-		//customerApi.getSaleForSpecificCustomer(customer1.getId()).execute().body();
-		//System.out.println(customer1.getId());
-		//System.out.println(sale1.getCustomer());
-		
-		System.out.println(saleApi.getSaleForSpecificCustomer("1").execute().body());
-		
-		/*List<Sale> sales = customerApi.getSaleForSpecificCustomer("1").execute().body();
-		for(Sale s: sales){
-			System.out.println(s);
-		}*/
+		//Get sales with a specific id
+		System.out.println(customerApi.salesCustomerIdGet("WD1321").execute().body());
 	}
 }

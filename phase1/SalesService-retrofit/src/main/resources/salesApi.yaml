@@ -72,9 +72,7 @@ paths:
     x-oad-type: operation
   '/sales/customer/{id}':
     get:
-      operationId: 'Get sale for specific customer'
-      summary: 'Get sale for specific customer'
-      description: 'Get sale for specific customer'
+      description: 'get customers sales'
       tags:
         - Customer
       responses:
