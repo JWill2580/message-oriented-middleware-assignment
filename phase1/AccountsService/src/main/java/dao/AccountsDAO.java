@@ -35,8 +35,8 @@ public class AccountsDAO {
 	 *
 	 * @param item The account being added.
 	 */
-	public void addAccount(Account item) {
-		accounts.put(item.getId(), item);
+	public void addAccount(Account account) {
+		accounts.put(account.getId(), account);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class AccountsDAO {
 	/**
 	 * Checks if an account exists.
 	 *
-	 * @param id The ID of the product being checked.
+	 * @param id The ID of the account being checked.
 	 * @return <code>true</code> if product exists, <code>false</code> if not.
 	 */
 	public boolean exists(String id) {
