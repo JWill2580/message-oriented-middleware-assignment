@@ -9,6 +9,23 @@ tags:
     name: Customer
 paths:
   /sales:
+    get:
+      description: 'get all sales'
+      tags:
+        - Sales
+      responses:
+        '200':
+          description: 'Response with array'
+          schema:
+            x-oad-type: array
+            type: array
+            items:
+              x-oad-type: reference
+              $ref: '#/definitions/Sale'
+          x-oad-type: response
+        '404':
+          description: 'Not found'
+          x-oad-type: response
     post:
       operationId: 'Create new sale'
       summary: 'Create new sale'
@@ -70,6 +87,9 @@ paths:
               x-oad-type: reference
               $ref: '#/definitions/Sale'
           x-oad-type: response
+        '404':
+          $ref: '#/responses/404'
+          x-oad-type: reference
     parameters:
       -
         name: id
@@ -141,12 +161,13 @@ definitions:
         x-oad-type: string
         type: string
         title: saleDate
-      Customer:
+      customer:
         x-oad-type: reference
         $ref: '#/definitions/Customer'
     required:
       - id
       - saleDate
+      - customer
   Customer:
     x-oad-type: object
     type: object
@@ -163,6 +184,8 @@ definitions:
         type: string
     required:
       - id
+      - email
+      - group
   Summary:
     x-oad-type: object
     type: object

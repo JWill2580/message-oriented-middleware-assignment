@@ -8,6 +8,7 @@ import org.jooby.apitool.ApiTool;
 import org.jooby.handlers.Cors;
 import org.jooby.handlers.CorsHandler;
 import org.jooby.json.Gzon;
+import resource.CustomerResource;
 import resource.SalesResource;
 import resource.SaleResource;
 
@@ -20,6 +21,7 @@ public class Server extends Jooby {
 		use("*", new CorsHandler(new Cors().withMethods("*")));
 
 		use(new Gzon());
+		use(new CustomerResource(dao));
 		use(new SalesResource(dao));
 		use(new SaleResource(dao));
 

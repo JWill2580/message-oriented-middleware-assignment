@@ -22,9 +22,13 @@ public class SalesDAO {
 		if (sales.isEmpty()) {
 			Customer cust1 = new Customer("1", "Josh@gamil.com", "low");
 			Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
+			Sale sale1 = new Sale("1", "12/12/12", cust1);
+			Sale sale2 = new Sale("2", "1/1/1", cust1);
 
-			sales.put("1", new Sale("1", "12/12/12", cust1));
-			sales.put("2", new Sale("2", "1/1/1", cust2));
+			sales.put(sale1.getId(), sale1);
+			sales.put(sale2.getId(), sale2);
+			salesMM.put(cust1.getId(), sale1);
+			salesMM.put(cust1.getId(), sale2);
 		}
 	}
 
@@ -44,8 +48,8 @@ public class SalesDAO {
 	 * @param id the id of the customer
 	 * @return the sale with that id
 	 */
-	public Collection<Sale> getThroughId(String id){
-		return salesMM.get(id);
+	public List<Sale> getThroughId(String id){
+		return new ArrayList<>(salesMM.get(id));
 	}
 	
 	/**
@@ -78,23 +82,19 @@ public class SalesDAO {
 	}
 
 	/**
-	 * Updates an sale (effectively replaces it).
-	 *
-	 * @param id The ID of the sale to replace.
-	 * @param updatedSale The sale to replace it with.
-	 */
-	public void updateSale(String id, Sale updatedSale) {
-		sales.put(id, updatedSale);
-	}
-
-	/**
 	 * Checks if an sale exists.
 	 *
 	 * @param id The ID of the sale being checked.
 	 * @return <code>true</code> if product exists, <code>false</code> if not.
 	 */
 	public boolean exists(String id) {
-		return sales.containsKey(id);
+		return salesMM.containsKey(id);
 	}
-
+	
+	/*public static void main(String[] args) {
+		SalesDAO dao = new SalesDAO();
+		
+		System.out.println(dao.getThroughId("1"));
+		System.out.println(dao.exists("1"));
+	}*/
 }

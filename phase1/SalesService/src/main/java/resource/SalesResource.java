@@ -13,16 +13,16 @@ public class SalesResource extends Jooby {
 
 		path("/api/sales", () -> {
 
-			/*get(() -> {
+			get(() -> {
 				return dao.getSales();
-			});*/
+			});
 
 			post((req, rsp) -> {
 				Sale sale = req.body(Sale.class);
 
 				if (!dao.exists(sale.getId())) {
 					// store the account
-					dao.addSale(sale);
+					dao.addSale(sale);//DAO method invokation
 
 					// return a response containing the complete account
 					rsp.status(Status.CREATED).send(sale);
