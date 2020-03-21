@@ -2,6 +2,7 @@ package dao;
 
 import domain.Customer;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import domain.Sale;
 import java.util.ArrayList;
@@ -14,21 +15,22 @@ import java.util.TreeMap;
 public class SalesDAO {
 
 	private static final Map<String, Sale> sales = new HashMap<>();
-	private static final Multimap<String, Sale> salesMM = ArrayListMultimap.create();
+	private static final ListMultimap<String, Sale> salesMM = ArrayListMultimap.create();
 	/*
 	 * Some dummy data for testing
 	 */
 	static {
 		if (sales.isEmpty()) {
-			Customer cust1 = new Customer("1", "Josh@gamil.com", "low");
+			Customer cust1 = new Customer("WD1321", "Josh@gamil.com", "low");
 			Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
+			
 			Sale sale1 = new Sale("1", "12/12/12", cust1);
 			Sale sale2 = new Sale("2", "1/1/1", cust1);
 
 			sales.put(sale1.getId(), sale1);
 			sales.put(sale2.getId(), sale2);
-			salesMM.put(cust1.getId(), sale1);
-			salesMM.put(cust1.getId(), sale2);
+			salesMM.put(sale1.getCustomer().getId(), sale1);
+			salesMM.put(sale2.getCustomer().getId(), sale2);
 		}
 	}
 
@@ -49,7 +51,7 @@ public class SalesDAO {
 	 * @return the sale with that id
 	 */
 	public List<Sale> getThroughId(String id){
-		return new ArrayList<>(salesMM.get(id));
+		return salesMM.get(id);
 	}
 	
 	/**

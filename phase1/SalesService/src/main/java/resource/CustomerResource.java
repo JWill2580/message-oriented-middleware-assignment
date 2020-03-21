@@ -27,11 +27,11 @@ public class CustomerResource extends Jooby {
 				}
 			});
 
-			get("/:id", (req, rsp) -> {
+			get("/:id", (req) -> {
 				String id = req.param("id").value();
-				dao.getThroughId(id);
-				rsp.status(Status.NO_CONTENT);
+				return dao.getThroughId(id);
 			});
+
 		}).produces(MediaType.json).consumes(MediaType.json);
 
 	}
