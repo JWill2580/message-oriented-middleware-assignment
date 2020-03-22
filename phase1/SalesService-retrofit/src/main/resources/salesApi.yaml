@@ -99,8 +99,8 @@ paths:
     x-oad-type: operation
   '/sales/summary/customer/{id}':
     get:
-      operationId: 'Get sale data for specified customer'
-      summary: 'Get sale data for specified customer'
+      operationId: getSummary
+      summary: getSummary
       description: 'Get sale data for specified customer'
       tags:
         - Customer
@@ -165,11 +165,13 @@ definitions:
       total:
         x-oad-type: reference
         $ref: '#/definitions/Total'
+      saleItem:
+        x-oad-type: reference
+        $ref: '#/definitions/SaleItem'
     required:
       - id
       - saleDate
       - customer
-      - total
   Customer:
     x-oad-type: object
     type: object

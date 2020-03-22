@@ -64,9 +64,12 @@ public class Main {
 		//System.out.println(salesApi.salesGet().execute().body());
 		
 		//Delete a sale 2 that exists in the database
-		//saleApi.deleteASale("2").execute().body();
+		saleApi.deleteASale("2").execute().body();
 		
 		//Get sales with a specific id
 		System.out.println(customerApi.salesCustomerIdGet("WD1321").execute().body());
+		
+		//Get summary data for a specific customer
+		System.out.println(customerApi.getSummary("WD1321").execute().body());
 	}
 }
