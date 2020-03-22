@@ -6,14 +6,11 @@ import domain.SaleItem;
 import domain.Summary;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
 import domain.Sale;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class SalesDAO {
 
@@ -42,7 +39,8 @@ public class SalesDAO {
 	
 	/**
 	 * Calculating the summary resource
-	 * @return 
+	 * @param id the customers sales
+	 * @return the summary of the sales for that customer
 	 */
 	public Summary getSummaryResource(String id){
 		Summary sum = new Summary();
@@ -93,7 +91,7 @@ public class SalesDAO {
 	/**
 	 * Adds a account to the catalogue.
 	 *
-	 * @param item The sale being added.
+	 * @param sale The sale being added.
 	 */
 	public void addSale(Sale sale) {
 		sales.put(sale.getId(), sale);
@@ -117,7 +115,7 @@ public class SalesDAO {
 	 */
 	public void delete(String id) {
 		sales.remove(id);
-		//salesMM.remove(id, id);
+		salesMM.removeAll(id);
 	}
 
 	/**
@@ -130,11 +128,13 @@ public class SalesDAO {
 		return salesMM.containsKey(id);
 	}
 	//Main method used for testing
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		SalesDAO dao = new SalesDAO();
 		
 		//System.out.println(dao.getThroughId("1"));
-		//System.out.println(dao.exists("1"));
-		System.out.println(dao.getSummaryResource("WD1321"));
-	}
+		//System.out.println(dao.exists("WD1321"));
+		//dao.delete("WD1321");
+		//System.out.println(dao.exists("WD1321"));
+		//System.out.println(dao.getSummaryResource("WD1321"));
+	}*/
 }
