@@ -27,7 +27,7 @@ public class Sale {
 		this.saleDate = saleDate;
 		this.customer = customer;
 		this.total = total;
-		this.saleItem.add(saleItem);
+		//this.saleItem.add(saleItem);
 	}
 
 	public Totals getTotal() {

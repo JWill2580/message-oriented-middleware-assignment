@@ -25,9 +25,7 @@ public class SalesDAO {
 	static {
 		if (sales.isEmpty()) {
 			Customer cust1 = new Customer("WD1321", "Josh@gamil.com", "low");
-			
 			SaleItem items = new SaleItem("1", 1.0, 4.0);
-			
 			Totals total = new Totals(4.0, 1.0);
 
 			//Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
@@ -40,6 +38,36 @@ public class SalesDAO {
 			salesMM.put(sale1.getCustomer().getId(), sale1);
 			salesMM.put(sale2.getCustomer().getId(), sale2);
 		}
+	}
+	
+	/**
+	 * Calculating the summary resource
+	 * @return 
+	 */
+	public Summary getSummaryResource(String id){
+		Summary sum = new Summary();
+		
+		//Setting numOfSales of number of separate values in MultiMap
+		int numOfSales = salesMM.get(id).size();
+		sum.setNumberOfSales(numOfSales);
+		
+		//Setting total to sum of payment
+		double totalPayment = 0.0;
+		
+		for(Sale sale : salesMM.get(id)){
+			totalPayment += sale.getTotal().getTotalPayment();
+		}
+		sum.setTotalPayment(totalPayment);
+		
+		//Setting the group
+		if(totalPayment > 5000){
+			sum.setGroup("high");
+		} else {
+			sum.setGroup("low");
+		}
+		//setting URI
+		sum.setUri("http://localhost:8080/api/sales/summary/customer/" + id);
+		return sum;
 	}
 
 	/**
@@ -89,6 +117,7 @@ public class SalesDAO {
 	 */
 	public void delete(String id) {
 		sales.remove(id);
+		//salesMM.remove(id, id);
 	}
 
 	/**
@@ -100,11 +129,12 @@ public class SalesDAO {
 	public boolean exists(String id) {
 		return salesMM.containsKey(id);
 	}
-	
-	/*public static void main(String[] args) {
+	//Main method used for testing
+	public static void main(String[] args) {
 		SalesDAO dao = new SalesDAO();
 		
-		System.out.println(dao.getThroughId("1"));
-		System.out.println(dao.exists("1"));
-	}*/
+		//System.out.println(dao.getThroughId("1"));
+		//System.out.println(dao.exists("1"));
+		System.out.println(dao.getSummaryResource("WD1321"));
+	}
 }

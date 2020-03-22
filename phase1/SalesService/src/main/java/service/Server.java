@@ -11,6 +11,7 @@ import org.jooby.json.Gzon;
 import resource.CustomerResource;
 import resource.SalesResource;
 import resource.SaleResource;
+import resource.SummaryResource;
 
 public class Server extends Jooby {
 
@@ -24,6 +25,7 @@ public class Server extends Jooby {
 		use(new CustomerResource(dao));
 		use(new SalesResource(dao));
 		use(new SaleResource(dao));
+		use(new SummaryResource(dao));
 
 		use(new ApiTool().swagger(new ApiTool.Options("/swagger").use("salesApi.yaml")));
 
