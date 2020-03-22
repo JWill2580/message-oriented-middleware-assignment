@@ -50,17 +50,19 @@ public class Main {
 		item.setPrice(2.0f);
 		item.setProductId("M123");
 		item.setQuantity(1.0f);
-		
+
 		Sale sale1 = new Sale();
 		sale1.setId("3");
 		sale1.setSaleDate("2/2/2");
 		sale1.setCustomer(customer1);
 		sale1.setTotal(total);
-		//sale1.setSaleItem(item);
+		sale1.addSaleItemItem(item);
 		
-	
-		//Getting all sales TODO: remove this functionality as is for testing
+		
+		//Createing a new sale via post method
 		salesApi.createNewSale(sale1).execute().body();
+		
+		//Getting all sales TODO: remove this functionality as is for testing
 		//System.out.println(salesApi.salesGet().execute().body());
 		
 		//Delete a sale 2 that exists in the database
