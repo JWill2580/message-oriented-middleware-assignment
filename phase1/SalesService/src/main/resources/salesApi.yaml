@@ -162,13 +162,18 @@ definitions:
       customer:
         x-oad-type: reference
         $ref: '#/definitions/Customer'
+      total:
+        x-oad-type: reference
+        $ref: '#/definitions/Total'
     required:
       - id
       - saleDate
       - customer
+      - total
   Customer:
     x-oad-type: object
     type: object
+    title: Customer
     description: 'Details for a specified customer'
     properties:
       id:
@@ -203,6 +208,44 @@ definitions:
       uri:
         x-oad-type: string
         type: string
+  Total:
+    x-oad-type: object
+    type: object
+    title: Total
+    properties:
+      totalPrice:
+        x-oad-type: number
+        type: number
+        format: float
+      totalTax:
+        x-oad-type: number
+        type: number
+        title: totalTax
+        format: float
+      totalPayment:
+        x-oad-type: number
+        type: number
+        title: totalPayment
+        format: float
+  SaleItem:
+    x-oad-type: object
+    type: object
+    title: SaleItem
+    properties:
+      productId:
+        x-oad-type: string
+        type: string
+        title: productId
+      quantity:
+        x-oad-type: number
+        type: number
+        title: quantity
+        format: float
+      price:
+        x-oad-type: number
+        type: number
+        title: price
+        format: float
 info:
   title: 'Sales Service'
   version: 1.0.0

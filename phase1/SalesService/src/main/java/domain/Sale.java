@@ -6,25 +6,46 @@
 package domain;
 
 import domain.Customer;
+import java.util.Collection;
 
 /**
  *
  * @author wiljo912
  */
 public class Sale {
-	String id;
-	String saleDate;
-	Customer customer;
+	private String id;
+	private String saleDate;
+	private Customer customer;
+	private Totals total;
+	private Collection<SaleItem> saleItem;
 
 	public Sale() {
 	}
 
-	public Sale(String id, String saleDate, Customer customer) {
+	public Sale(String id, String saleDate, Customer customer, Totals total, SaleItem saleItem) {
 		this.id = id;
 		this.saleDate = saleDate;
 		this.customer = customer;
+		this.total = total;
+		this.saleItem.add(saleItem);
 	}
 
+	public Totals getTotal() {
+		return total;
+	}
+
+	public void setTotal(Totals total) {
+		this.total = total;
+	}
+
+	public Collection<SaleItem> getSaleItem() {
+		return saleItem;
+	}
+
+	public void setSaleItem(Collection<SaleItem> saleItem) {
+		this.saleItem = saleItem;
+	}
+	
 	public String getId() {
 		return id;
 	}

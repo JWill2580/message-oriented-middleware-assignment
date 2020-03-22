@@ -17,10 +17,10 @@ public class Totals {
 	public Totals() {
 	}
 
-	public Totals(Double totalPrice, Double totalTax, Double totalPayment) {
+	public Totals(Double totalPrice, Double totalTax) {
 		this.totalPrice = totalPrice;
 		this.totalTax = totalTax;
-		this.totalPayment = totalPayment;
+		this.totalPayment = this.totalPrice-this.totalTax;
 	}
 
 	public Double getTotalPrice() {

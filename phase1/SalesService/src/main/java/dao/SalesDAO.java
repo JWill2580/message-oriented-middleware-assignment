@@ -1,6 +1,9 @@
 package dao;
 
 import domain.Customer;
+import domain.Totals;
+import domain.SaleItem;
+import domain.Summary;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
@@ -22,10 +25,15 @@ public class SalesDAO {
 	static {
 		if (sales.isEmpty()) {
 			Customer cust1 = new Customer("WD1321", "Josh@gamil.com", "low");
-			Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
 			
-			Sale sale1 = new Sale("1", "12/12/12", cust1);
-			Sale sale2 = new Sale("2", "1/1/1", cust1);
+			SaleItem items = new SaleItem("1", 1.0, 4.0);
+			
+			Totals total = new Totals(4.0, 1.0);
+
+			//Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
+			
+			Sale sale1 = new Sale("1", "12/12/12", cust1, total, items);
+			Sale sale2 = new Sale("2", "1/1/1", cust1, total, items);
 
 			sales.put(sale1.getId(), sale1);
 			sales.put(sale2.getId(), sale2);
