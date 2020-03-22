@@ -5,7 +5,7 @@
  */
 package domain;
 
-import domain.Customer;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -17,7 +17,7 @@ public class Sale {
 	private String saleDate;
 	private Customer customer;
 	private Totals total;
-	private Collection<SaleItem> saleItem;
+	private Collection<SaleItem> saleItems = new ArrayList<SaleItem>();
 
 	public Sale() {
 	}
@@ -27,7 +27,14 @@ public class Sale {
 		this.saleDate = saleDate;
 		this.customer = customer;
 		this.total = total;
-		//this.saleItem.add(saleItem);
+		this.saleItems.add(saleItem);
+	}
+	
+	public Sale(String id, String saleDate, Customer customer, Totals total) {
+		this.id = id;
+		this.saleDate = saleDate;
+		this.customer = customer;
+		this.total = total;
 	}
 
 	public Totals getTotal() {
@@ -39,11 +46,7 @@ public class Sale {
 	}
 
 	public Collection<SaleItem> getSaleItem() {
-		return saleItem;
-	}
-
-	public void setSaleItem(Collection<SaleItem> saleItem) {
-		this.saleItem = saleItem;
+		return saleItems;
 	}
 	
 	public String getId() {
@@ -70,11 +73,12 @@ public class Sale {
 		this.customer = customer;
 	}
 
+	public void addSaleItem(SaleItem item){
+		this.saleItems.add(item);
+	}
+	
 	@Override
 	public String toString() {
 		return "Sale{" + "id=" + id + ", saleDate=" + saleDate + ", customer=" + customer + '}';
 	}
-
-
-	
 }

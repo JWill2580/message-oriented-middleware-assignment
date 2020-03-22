@@ -21,14 +21,16 @@ public class SalesDAO {
 	 */
 	static {
 		if (sales.isEmpty()) {
-			Customer cust1 = new Customer("WD1321", "Josh@gamil.com", "low");
-			SaleItem items = new SaleItem("1", 1.0, 4.0);
+			Customer cust1 = new Customer("WD1321", "Josh@gmail.com", "low");
 			Totals total = new Totals(4.0, 1.0);
 
+			SaleItem item = new SaleItem("1", 1.0, 4.0);
+
 			//Customer cust2 = new Customer("2", "Ruby@gamil.com", "high");
-			
-			Sale sale1 = new Sale("1", "12/12/12", cust1, total, items);
-			Sale sale2 = new Sale("2", "1/1/1", cust1, total, items);
+			Sale sale1 = new Sale("1", "12/12/12", cust1, total, item);
+			Sale sale2 = new Sale("2", "1/1/1", cust1, total, item);
+			//sale1.addSaleItem(item);
+			//sale2.addSaleItem(item);
 
 			sales.put(sale1.getId(), sale1);
 			sales.put(sale2.getId(), sale2);

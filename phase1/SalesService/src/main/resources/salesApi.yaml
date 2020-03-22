@@ -166,12 +166,17 @@ definitions:
         x-oad-type: reference
         $ref: '#/definitions/Total'
       saleItem:
-        x-oad-type: reference
-        $ref: '#/definitions/SaleItem'
+        x-oad-type: array
+        type: array
+        items:
+          x-oad-type: reference
+          $ref: '#/definitions/SaleItem'
     required:
       - id
       - saleDate
       - customer
+      - total
+      - saleItem
   Customer:
     x-oad-type: object
     type: object
@@ -248,6 +253,10 @@ definitions:
         type: number
         title: price
         format: float
+    required:
+      - productId
+      - quantity
+      - price
 info:
   title: 'Sales Service'
   version: 1.0.0
