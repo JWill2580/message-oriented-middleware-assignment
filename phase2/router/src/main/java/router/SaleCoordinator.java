@@ -11,7 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
  *
  * @author admin
  */
-public class AccountReplicator extends RouteBuilder{
+public class SaleCoordinator extends RouteBuilder{
 
     @Override
     public void configure() throws Exception {
