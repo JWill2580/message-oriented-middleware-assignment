@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import org.jooby.Jooby;
 import org.jooby.Results;
+import org.jooby.handlers.Cors;
+import org.jooby.handlers.CorsHandler;
 
 public class Server extends Jooby {
 
 	public Server() {
+                use("*", new CorsHandler(new Cors().withMethods("*")));
 		assets("/**");
 		assets("/", "index.html");
 		get("/favicon.ico", () -> Results.noContent());
