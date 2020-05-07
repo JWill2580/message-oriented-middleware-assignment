@@ -6,6 +6,8 @@ import java.util.concurrent.CompletableFuture;
 import org.jooby.Jooby;
 import org.jooby.Results;
 import org.jooby.apitool.ApiTool;
+import org.jooby.handlers.Cors;
+import org.jooby.handlers.CorsHandler;
 import org.jooby.json.Gzon;
 import resource.AccountResource;
 import resource.AccountCollectionResource;
@@ -13,7 +15,7 @@ import resource.AccountCollectionResource;
 public class Service extends Jooby {
 	
 	public Service() {
-		
+
 		AccountsDAO dao = new AccountsDAO();
 		
 		port(8086);

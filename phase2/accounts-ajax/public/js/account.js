@@ -17,6 +17,6 @@ module.controller('AccountController', function (accountApi) {
     this.test = "It works!";
     this.addAccount = function (accountToAdd) {
         accountApi.save({}, accountToAdd);
-        //console.log(accountToAdd);
+        console.log(accountToAdd);
     };
 });
