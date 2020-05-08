@@ -69,7 +69,6 @@ public class AccountCoordinator extends RouteBuilder{
                 .log("${body}")
                 .unmarshal().json(JsonLibrary.Gson, Customer.class) //potential issue here
                 .to("jms:queue:account-creator");
-        //comment out below this and it works
         
         //Another bean to create account
         from("jms:queue:account-creator")
@@ -85,21 +84,16 @@ public class AccountCoordinator extends RouteBuilder{
                 .log("After account ${body}")
                 .to("jms:queue:account-rest");
         
-        /*from("jms:queue:account-creator")
-                .log("Before account ${body}")
-                .bean(AccountCreator.class, 
-                        "createAccount("
-                        + "${body.id},"
-                        + "${body.email},"
-                        + "${body.customer_code},"
-                        + "${body.first_name},"
-                        + "${body.last_name},"                
-                        + "${body.customer_group_id})")
-                .log("After account ${body}")
-                .to("jms:queue:account-rest");*/
-        
+        //comment out below this and it works
+ 
         //send to service
-        
+        from("jms:queue:account-rest")
+                .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
+                .removeHeaders("*") // remove headers to stop them being sent to the service
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http://localhost:8086/api/accounts")
+                .to("jms:queue:http-response");  // HTTP response ends up in this queue
     }
     
 }
