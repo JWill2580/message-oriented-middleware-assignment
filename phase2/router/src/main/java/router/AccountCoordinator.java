@@ -72,20 +72,20 @@ public class AccountCoordinator extends RouteBuilder{
         //comment out below this and it works
         
         //Another bean to create account
-        /*from("jms:queue:account-creator")
+        from("jms:queue:account-creator")
                 .log("Before account ${body}")
                 .bean(AccountCreator.class, 
                         "createAccount("
                         + "${body.id}, "
-                        + "${body.email},"
-                        + "${body.username}, "
+                        + "${body.group},"
+                        + "${body.email}, "
                         + "${body.firstName}, "
                         + "${body.lastName}, "
-                        + "${body.group})")
+                        + "${body.customerCode})")
                 .log("After account ${body}")
-                .to("jms:queue:account-rest");*/
+                .to("jms:queue:account-rest");
         
-        from("jms:queue:account-creator")
+        /*from("jms:queue:account-creator")
                 .log("Before account ${body}")
                 .bean(AccountCreator.class, 
                         "createAccount("
@@ -96,7 +96,7 @@ public class AccountCoordinator extends RouteBuilder{
                         + "${body.last_name},"                
                         + "${body.customer_group_id})")
                 .log("After account ${body}")
-                .to("jms:queue:account-rest");
+                .to("jms:queue:account-rest");*/
         
         //send to service
         

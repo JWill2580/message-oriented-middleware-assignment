@@ -12,15 +12,17 @@ import domain.Account;
  * @author admin
  */
 public class AccountCreator {
-    public Account createAccount(String id, String email, String username, String firstName, String lastName, String group){
+    public Account createAccount(String id,  String group, String email, String firstName, String lastName, String username){
         Account acc = new Account();
         acc.setId(id);
-        acc.setUsername(username);
+        acc.setGroup(group);
         acc.setEmail(email);
         acc.setFirstName(firstName);
         acc.setLastName(lastName);
-        acc.setGroup(group);
+        acc.setUsername(username);
+        //acc.setUri("");
         
+       
         return acc;
     }
 }
