@@ -67,7 +67,7 @@ public class AccountCoordinator extends RouteBuilder{
         //Unmarshal 
         from("jms:queue:extracted-response")
                 .log("${body}")
-                .unmarshal().json(JsonLibrary.Gson, Customer.class) //potential issue here
+                .unmarshal().json(JsonLibrary.Gson, Customer.class)
                 .to("jms:queue:account-creator");
         
         //Another bean to create account
@@ -83,10 +83,8 @@ public class AccountCoordinator extends RouteBuilder{
                         + "${body.customerCode})")
                 .log("After account ${body}")
                 .to("jms:queue:account-rest");
-        
-        //comment out below this and it works
- 
-        //send to service
+         
+        //send to customer accounts service
         from("jms:queue:account-rest")
                 .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
                 .removeHeaders("*") // remove headers to stop them being sent to the service
