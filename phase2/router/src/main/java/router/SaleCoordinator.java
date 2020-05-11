@@ -11,6 +11,7 @@ import org.apache.camel.builder.RouteBuilder;
 import creator.SaleCreator;
 import domain.Sale;
 import domain.SaleItem;
+import org.apache.camel.Exchange;
 import org.apache.camel.model.dataformat.JsonLibrary;
 
 /**
@@ -27,33 +28,36 @@ public class SaleCoordinator extends RouteBuilder{
                 + "&searchTerm.subject=Vend:SaleUpdate")
                 .convertBodyTo(String.class)
                 .log("Found ${body}")
-                .multicast()
-                .to("jms:queue:extract-properties", "jms:queue:extract-sale");     
+                .to("jms:queue:extract-properties");     
       
         
         from("jms:queue:extract-properties")
                 .unmarshal().json(JsonLibrary.Gson, Sale.class) 
-                .setProperty("customerid").simple("${body.customer.customer_group_id}")
+                .setProperty("customerid").simple("${body.customer.group}")
                 .setProperty("id").simple("${body.customer.id}")
-                .setProperty("firstname").simple("${body.customer.first_name}")
-                .setProperty("lastname").simple("${body.customer.last_name}")
+                .setProperty("firstname").simple("${body.customer.firstName}")
+                .setProperty("lastname").simple("${body.customer.lastName}")
                 .setProperty("email").simple("${body.customer.email}")
-                .log("$properties")
-                .to("jms:queue:replace");
- /*
-        //bean to extract sale
-        from("jms:queue:extract-sale")
-                .log("Before sale ${body}")
-                .bean(SaleCreator.class, 
-                        "createSale("
-                        + "${body.username},"
-                        + "${body.firstName},"
-                        + "${body.lastName},"
-                        + "${body.email})")
-                .log("After sale ${body}")
-                .to("jms:queue:sale-rest");
-        */
+                //.log("${properties}")
+                .to("jms:queue:sales-service");
         
+        from("jms:queue:sales-service")
+                .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
+                .removeHeaders("*") // remove headers to stop them being sent to the service
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http://localhost:8081/api/sales")
+                .to("jms:queue:post-response");
+ 
+        from("jms:queue:post-response")
+                .removeHeaders("*")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .toD("http://localhost:8081/api/sales/customer/${exchangeProperty.id}/summary")
+                .log("summary after ${body}")
+                .to("jms:queue:get-response");
+        
+                
     }
     
     public static String getPassword(String prompt) {
