@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.apache.camel.builder.RouteBuilder;
 import creator.SummaryCreator;
+import domain.Customer;
 import domain.Sale;
 import domain.SaleItem;
 import domain.Summary;
@@ -35,7 +36,8 @@ public class SaleCoordinator extends RouteBuilder{
         
         from("jms:queue:extract-properties")
                 .unmarshal().json(JsonLibrary.Gson, Sale.class) 
-                .setProperty("customerid").simple("${body.customer.group}")
+                .setProperty("group").simple("${body.customer.group}")
+                .setProperty("username").simple("${body.customer.customerCode}")//minor change here
                 .setProperty("id").simple("${body.customer.id}")
                 .setProperty("firstname").simple("${body.customer.firstName}")
                 .setProperty("lastname").simple("${body.customer.lastName}")
@@ -74,25 +76,23 @@ public class SaleCoordinator extends RouteBuilder{
         from("jms:queue:compare-group")
                 .choice()
                 //.when().simple("${body.group} == '0afa8de1-147c-11e8-edec-2b197906d816'")
-                .when().simple("${body.group} == ${exchangeProperty.customerid}")
+                .when().simple("${body.group} == ${exchangeProperty.group}")
                 .to("jms:queue:update")
                 .otherwise()
                 .to("jms:queue:update");
-        
-        //works till here but with serialization issues in activemq
         
         from("jms:queue:update")
                 //bean
                 .log("Before Customer ${body}")
                 .bean(CustomerCreator.class, 
                         "updateCustomer("
-                        + "${body.username},"
-                        + "${body.firstName},"
-                        + "${body.lastName},"
-                        + "${body.email},"
-                        + "${body.group})")
+                        + "${exchangeProperty.username},"
+                        + "${exchangeProperty.firstname},"
+                        + "${exchangeProperty.lastname},"
+                        + "${exchangeProperty.email},"
+                        + "${exchangeProperty.group})")
                 .log("After Customer ${body}")
-                .to("jms:queue:compare-group");
+                .to("jms:queue:lol");
                
     }
     
