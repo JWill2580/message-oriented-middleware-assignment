@@ -5,12 +5,14 @@
  */
 package router;
 
+import creator.CustomerCreator;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.apache.camel.builder.RouteBuilder;
-import creator.SaleCreator;
+import creator.SummaryCreator;
 import domain.Sale;
 import domain.SaleItem;
+import domain.Summary;
 import org.apache.camel.Exchange;
 import org.apache.camel.model.dataformat.JsonLibrary;
 
@@ -54,10 +56,44 @@ public class SaleCoordinator extends RouteBuilder{
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .toD("http://localhost:8081/api/sales/customer/${exchangeProperty.id}/summary")
-                .log("summary after ${body}")
+                .log("summary is ${body}")
                 .to("jms:queue:get-response");
         
-                
+        //bean to create summary using group data to get group id
+        from("jms:queue:get-response")
+                .unmarshal().json(JsonLibrary.Gson, Summary.class) 
+                .log("Before Summary ${body}")
+                .bean(SummaryCreator.class, 
+                        "createSummary("
+                        + "${body.numberOfSales},"
+                        + "${body.totalPayment},"
+                        + "${body.group})")
+                .log("After Summary ${body}")
+                .to("jms:queue:compare-group");
+        
+        from("jms:queue:compare-group")
+                .choice()
+                //.when().simple("${body.group} == '0afa8de1-147c-11e8-edec-2b197906d816'")
+                .when().simple("${body.group} == ${exchangeProperty.customerid}")
+                .to("jms:queue:update")
+                .otherwise()
+                .to("jms:queue:update");
+        
+        //works till here but with serialization issues in activemq
+        
+        from("jms:queue:update")
+                //bean
+                .log("Before Customer ${body}")
+                .bean(CustomerCreator.class, 
+                        "updateCustomer("
+                        + "${body.username},"
+                        + "${body.firstName},"
+                        + "${body.lastName},"
+                        + "${body.email},"
+                        + "${body.group})")
+                .log("After Customer ${body}")
+                .to("jms:queue:compare-group");
+               
     }
     
     public static String getPassword(String prompt) {

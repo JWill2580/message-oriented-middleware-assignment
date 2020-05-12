@@ -21,4 +21,21 @@ public class CustomerCreator {
         cust.setGroup("0afa8de1-147c-11e8-edec-2b197906d816");
         return cust;
     }
+    
+    public Customer updateCustomer(String username, String firstName, String lastName, String email, String group){
+        Customer cust = new Customer();
+        cust.setCustomerCode(username);
+        cust.setFirstName(firstName);
+        cust.setLastName(lastName);
+        cust.setEmail(email);
+        
+        //Switching groups
+        if(group.equals("0afa8de1-147c-11e8-edec-2b197906d816")){
+            cust.setGroup("0afa8de1-147c-11e8-edec-201e0f00872c");
+        } else {
+            cust.setGroup("0afa8de1-147c-11e8-edec-2b197906d816");
+
+        }
+        return cust;
+    }
 }
