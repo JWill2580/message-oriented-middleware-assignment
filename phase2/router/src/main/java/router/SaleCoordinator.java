@@ -114,13 +114,29 @@ public class SaleCoordinator extends RouteBuilder{
         //send to customer accounts service
         from("jms:queue:rest-account")
                 .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
-                .log("${body}")
                 .removeHeaders("*") // remove headers to stop them being sent to the service
                 .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("http://localhost:8086/api/accounts/account/${exchangeProperty.id}")
+                .log("${exchangeProperty.id}")
+                .toD("http://localhost:8086/api/accounts/account/${exchangeProperty.id}")
                 .to("jms:queue:http-response-accounts");  // HTTP response ends up in this queue               
-                
+        
+
+        from("jms:queue:vend-rest")
+                 // remove headers so they don't get sent to Vend
+                .removeHeaders("*")
+                // add authentication token to authorization header
+                .setHeader("Authorization", constant("Bearer KiQSsELLtocyS2WDN5w5s_jYaBpXa0h2ex1mep1a"))
+                // marshal to JSON
+                .marshal().json(JsonLibrary.Gson)  // only necessary if the message is an object, not JSON
+                .setHeader(Exchange.CONTENT_TYPE).constant("application/json")
+                // set HTTP method
+                .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+                // send it
+                .toD("https://info303otago.vendhq.com/api/2.0/customers/${exchangeProperty.id}")
+                //.to("http://localhost:8089/api/2.0/customers")
+                // store the response
+                .to("jms:queue:vend-response");
                
     }
     
