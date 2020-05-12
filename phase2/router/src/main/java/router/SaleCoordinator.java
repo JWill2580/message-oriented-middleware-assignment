@@ -34,7 +34,7 @@ public class SaleCoordinator extends RouteBuilder{
                 .log("Found ${body}")
                 .to("jms:queue:extract-properties");     
       
-        
+        //Extracting properities to be used for later use in beans
         from("jms:queue:extract-properties")
                 .unmarshal().json(JsonLibrary.Gson, Sale.class) 
                 .setProperty("group").simple("${body.customer.group}")
@@ -46,6 +46,7 @@ public class SaleCoordinator extends RouteBuilder{
                 //.log("${properties}")
                 .to("jms:queue:sales-service");
         
+        //sending sale to our service
         from("jms:queue:sales-service")
                 .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
                 .removeHeaders("*") // remove headers to stop them being sent to the service
@@ -54,6 +55,7 @@ public class SaleCoordinator extends RouteBuilder{
                 .to("http://localhost:8081/api/sales")
                 .to("jms:queue:post-response");
  
+        //Getting 'calculated resource' summary data from service
         from("jms:queue:post-response")
                 .removeHeaders("*")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
@@ -74,14 +76,16 @@ public class SaleCoordinator extends RouteBuilder{
                 .log("After Summary ${body}")
                 .to("jms:queue:compare-group");
         
+        //Comparing groups to see whether should change
         from("jms:queue:compare-group")
                 .choice()
                 //.when().simple("${body.group} == '0afa8de1-147c-11e8-edec-2b197906d816'")
                 .when().simple("${body.group} == ${exchangeProperty.group}")
-                .to("jms:queue:update")
+                .to("jms:queue:done")
                 .otherwise()
                 .to("jms:queue:update");
         
+        //Change required so calling update customer method
         from("jms:queue:update")
                 //bean
                 .log("Before Customer ${body}")
@@ -95,9 +99,11 @@ public class SaleCoordinator extends RouteBuilder{
                         + "${exchangeProperty.group})")
                 .log("After Customer ${body}")
                 .multicast()
-                .to("jms:queue:bean-account", "jms:queue:vend-rest");
+                //Split into creating the new account and updating service
+                //and PUTting new customer into vend service
+                .to("jms:queue:bean-account", "jms:queue:vend-rest-2");
         
-        //Works till here
+        //Creating account with bean
         from("jms:queue:bean-account")
                 .log("Before Account ${body}")
                 .bean(AccountCreator.class, 
@@ -117,12 +123,14 @@ public class SaleCoordinator extends RouteBuilder{
                 .removeHeaders("*") // remove headers to stop them being sent to the service
                 .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .log("${exchangeProperty.id}")
+                .log("before")
                 .toD("http://localhost:8086/api/accounts/account/${exchangeProperty.id}")
+                .log("after")
                 .to("jms:queue:http-response-accounts");  // HTTP response ends up in this queue               
         
-
-        from("jms:queue:vend-rest")
+        //send to vend service
+        from("jms:queue:vend-rest-2")
+                .log("hello ${body}")  
                  // remove headers so they don't get sent to Vend
                 .removeHeaders("*")
                 // add authentication token to authorization header
@@ -132,11 +140,10 @@ public class SaleCoordinator extends RouteBuilder{
                 .setHeader(Exchange.CONTENT_TYPE).constant("application/json")
                 // set HTTP method
                 .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
-                // send it
+                // send it                
                 .toD("https://info303otago.vendhq.com/api/2.0/customers/${exchangeProperty.id}")
-                //.to("http://localhost:8089/api/2.0/customers")
                 // store the response
-                .to("jms:queue:vend-response");
+                .to("jms:queue:vend-response-2");
                
     }
     
