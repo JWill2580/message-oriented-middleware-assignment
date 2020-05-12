@@ -21,8 +21,6 @@ public class AccountCreator {
         acc.setLastName(lastName);
         acc.setUsername(username);
         //acc.setUri("");
-        
-       
         return acc;
     }
 }

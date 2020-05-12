@@ -22,8 +22,9 @@ public class CustomerCreator {
         return cust;
     }
     
-    public Customer updateCustomer(String username, String firstName, String lastName, String email, String group){
+    public Customer updateCustomer(String id, String username, String firstName, String lastName, String email, String group){
         Customer cust = new Customer();
+        cust.setId(id);
         cust.setCustomerCode(username);
         cust.setFirstName(firstName);
         cust.setLastName(lastName);

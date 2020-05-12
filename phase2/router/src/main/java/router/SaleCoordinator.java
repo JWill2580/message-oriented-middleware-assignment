@@ -5,6 +5,7 @@
  */
 package router;
 
+import creator.AccountCreator;
 import creator.CustomerCreator;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -86,13 +87,40 @@ public class SaleCoordinator extends RouteBuilder{
                 .log("Before Customer ${body}")
                 .bean(CustomerCreator.class, 
                         "updateCustomer("
+                        + "${exchangeProperty.id},"
                         + "${exchangeProperty.username},"
                         + "${exchangeProperty.firstname},"
                         + "${exchangeProperty.lastname},"
                         + "${exchangeProperty.email},"
                         + "${exchangeProperty.group})")
                 .log("After Customer ${body}")
-                .to("jms:queue:lol");
+                .multicast()
+                .to("jms:queue:bean-account", "jms:queue:vend-rest");
+        
+        //Works till here
+        from("jms:queue:bean-account")
+                .log("Before Account ${body}")
+                .bean(AccountCreator.class, 
+                        "createAccount("
+                        + "${body.id}, "
+                        + "${body.group},"
+                        + "${body.email}, "
+                        + "${body.firstName}, "
+                        + "${body.lastName}, "
+                        + "${body.customerCode})")
+                .log("After account ${body}")
+                .to("jms:queue:rest-account");
+        
+        //send to customer accounts service
+        from("jms:queue:rest-account")
+                .marshal().json(JsonLibrary.Gson) // only necessary if object needs to be converted to JSON
+                .log("${body}")
+                .removeHeaders("*") // remove headers to stop them being sent to the service
+                .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http://localhost:8086/api/accounts/account/${exchangeProperty.id}")
+                .to("jms:queue:http-response-accounts");  // HTTP response ends up in this queue               
+                
                
     }
     

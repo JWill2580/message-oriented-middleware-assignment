@@ -29,8 +29,8 @@ public class Router {
 		camel.setStreamCaching(true);
 
 		// create and add the builder(s)
-		//camel.addRoutes(new AccountCoordinator());
-		camel.addRoutes(new SaleCoordinator());
+		camel.addRoutes(new AccountCoordinator());
+		//camel.addRoutes(new SaleCoordinator());
 
 		// start routing
 		System.out.println("Starting router...");
