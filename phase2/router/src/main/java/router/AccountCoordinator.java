@@ -27,10 +27,10 @@ public class AccountCoordinator extends RouteBuilder{
                 .setExchangePattern(ExchangePattern.InOnly)
                 .log("${body}")
                 .unmarshal().json(JsonLibrary.Gson, Account.class) 
-                .to("jms:queue:first-queue");
+                .to("jms:queue:customer-creation");
 
         //Bean to create customer
-        from("jms:queue:first-queue")
+        from("jms:queue:customer-creation")
                 .log("Before customer ${body}")
                 .bean(CustomerCreator.class, 
                         "createCustomer("

@@ -7,6 +7,14 @@ configurations {
 	all*.exclude module:'commons-logging'
 }
 
+sourceSets{
+    diagrams {
+        resources {
+         srcDir 'public'   
+        }     
+    }
+}
+
 dependencies {
 	def camelVer = '2.24.3'
 	def activeMqVer = '5.15.12'
